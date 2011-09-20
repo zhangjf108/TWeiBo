@@ -18,6 +18,9 @@
 //查看图片
 #import "MWPhotoBrowser.h"
 
+//地图
+#import "MapViewController.h"
+
 @implementation SendViewController
 
 @synthesize content;
@@ -26,6 +29,9 @@
 @synthesize imageIconView;
 @synthesize imageSmallView;
 @synthesize delBtn;
+@synthesize latitude;
+@synthesize longitude;
+
 
 //菊花
 MBProgressHUD *HUD;
@@ -153,6 +159,10 @@ static NSData *imageData;
 
 - (void)viewDidLoad
 {
+    self.latitude = [NSString stringWithString:@""];
+    self.longitude = [NSString stringWithString:@""];
+    
+    
     //自动显示键盘
     self.content.delegate = self;
     //[self.content selectAll:nil];
@@ -287,8 +297,8 @@ static NSData *imageData;
     NSMutableDictionary *parameters = [[[NSMutableDictionary alloc] init] autorelease];
     [parameters setValue:[param objectForKey:@"content"] forKey:@"content"];
     [parameters setValue:@"127.0.0.1" forKey:@"clientip"];
-    [parameters setValue:@"" forKey:@"Jing"];
-    [parameters setValue:@"" forKey:@"Wei"];
+    [parameters setValue:self.latitude forKey:@"jing"];
+    [parameters setValue:self.longitude forKey:@"wei"];
     
     QQWeiBo *qqWeibo = [[QQWeiBo alloc] init];
     [qqWeibo apiSynPostRequest:@"t/add"
@@ -304,8 +314,8 @@ static NSData *imageData;
     NSMutableDictionary *parameters = [[[NSMutableDictionary alloc] init] autorelease];
     [parameters setValue:[param objectForKey:@"content"] forKey:@"content"];
     [parameters setValue:@"127.0.0.1" forKey:@"clientip"];
-    [parameters setValue:@"" forKey:@"Jing"];
-    [parameters setValue:@"" forKey:@"Wei"];
+    [parameters setValue:self.latitude forKey:@"jing"];
+    [parameters setValue:self.longitude forKey:@"wei"];
     
     QQWeiBo *qqWeibo = [[QQWeiBo alloc] init];
     [qqWeibo apiSynPostImageWithRequsetMethod:@"t/add_pic"
@@ -321,6 +331,8 @@ static NSData *imageData;
     //发一条微薄
     NSMutableDictionary *parameters = [[[NSMutableDictionary alloc] init] autorelease];
     [parameters setValue:[param objectForKey:@"content"] forKey:@"status"];
+    [parameters setValue:self.latitude forKey:@"lat"];
+    [parameters setValue:self.longitude forKey:@"long"];
     
     SinaWeiBo *sinaWeibo = [[SinaWeiBo alloc] init];
     [sinaWeibo apiSynPostRequest:@"statuses/update.json"
@@ -336,6 +348,8 @@ static NSData *imageData;
     //发一条微薄
     NSMutableDictionary *parameters = [[[NSMutableDictionary alloc] init] autorelease];
     [parameters setValue:[param objectForKey:@"content"] forKey:@"status"];
+    [parameters setValue:self.latitude forKey:@"lat"];
+    [parameters setValue:self.longitude forKey:@"long"];
     
     SinaWeiBo *sinaWeibo = [[SinaWeiBo alloc] init];
     [sinaWeibo apiSynPostImageWithRequsetMethod:@"statuses/upload.json"
@@ -367,6 +381,20 @@ static NSData *imageData;
 
 - (void) animationFinished {
     [self.view removeFromSuperview];
+}
+
+//定位显示地图
+- (IBAction) location:(id)sender {
+    CLLocationManager *locManager = [[CLLocationManager alloc] init];
+    [locManager setDelegate:self]; 
+    [locManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    [locManager setDistanceFilter:5.0f];
+    [locManager startUpdatingLocation];
+    CLLocationCoordinate2D loc = [[locManager location] coordinate];
+    self.latitude = [NSString stringWithFormat:@"%f", loc.latitude];
+    self.longitude = [NSString stringWithFormat:@"%f", loc.longitude];
+    NSLog(@"%@ %@", self.latitude, self.longitude);
+    [locManager release];
 }
 
 //打开相机

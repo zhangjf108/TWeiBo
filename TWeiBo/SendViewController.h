@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "MBProgressHUD.h"
 
-@interface SendViewController : UIViewController<UITextViewDelegate, MBProgressHUDDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface SendViewController : UIViewController<UITextViewDelegate, MBProgressHUDDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate,CLLocationManagerDelegate> {
     IBOutlet UITextView *content;
     IBOutlet UILabel *characterSize;
     IBOutlet UIBarButtonItem *sendItem;
@@ -25,6 +27,10 @@
     IBOutlet UIButton *topicBtn;
     IBOutlet UIButton *atBtn;
     IBOutlet UIButton *picBtn;
+    
+    //经纬度
+    NSString *latitude;
+    NSString *longitude;
 }
 
 @property (nonatomic, retain) IBOutlet UITextView *content;
@@ -34,10 +40,14 @@
 @property (nonatomic, retain) IBOutlet UIImageView *imageSmallView;
 @property (nonatomic, retain) IBOutlet UIButton *delBtn;
 
+@property (nonatomic, retain) NSString *latitude;
+@property (nonatomic, retain) NSString *longitude;
+
 - (IBAction) backToIndex:(id)sender;
 - (IBAction) sendWeiBo:(id)sender;
 - (IBAction) openCanmera:(id)sender;
 - (IBAction) openPhotoLibrary:(id)sender;
+- (IBAction) location:(id)sender;
 
 //显示隐藏键盘
 - (IBAction) showAndHideKeyBorad:(id)sender;

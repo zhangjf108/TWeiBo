@@ -102,7 +102,7 @@ static CGRect getFrameByType(NSString *type) {
     
     head = [[UIImageView alloc] initWithFrame:getFrameByType(@"head")];
     [head setImageWithURL:[NSURL URLWithString:headUrl] 
-         placeholderImage:[UIImage imageNamed:@"sina48.png"]];
+         placeholderImage:[UIImage imageNamed:@"logo_gray40.png"]];
         
     head.layer.masksToBounds = YES;
     head.layer.cornerRadius = 5.0;
@@ -153,7 +153,7 @@ static CGRect getFrameByType(NSString *type) {
         oriImage = [[UIImageView alloc] initWithFrame:CGRectMake(55, cellHeight + 5, 80, 80)];
         NSString *imageUrl = [NSString stringWithFormat:@"%@/160", [oriImageUrls objectAtIndex:0]];
         [oriImage setImageWithURL:[NSURL URLWithString:imageUrl]
-                 placeholderImage:[UIImage imageNamed:@"sina48.png"]];
+                 placeholderImage:[UIImage imageNamed:@"logo_gray80.png"]];
         oriImage.contentMode = UIViewContentModeScaleAspectFit;
         oriImage.layer.masksToBounds = YES;
         oriImage.layer.cornerRadius = 2.0; 
@@ -196,7 +196,7 @@ static CGRect getFrameByType(NSString *type) {
             sourceImage = [[UIImageView alloc] initWithFrame:CGRectMake(65, cellHeight + 10, 80, 80)];
             NSString *soureImageUrl = [NSString stringWithFormat:@"%@/160", [sourceImages objectAtIndex:0]];
             [sourceImage setImageWithURL:[NSURL URLWithString:soureImageUrl]
-                        placeholderImage:[UIImage imageNamed:@"sina48.png"]];
+                        placeholderImage:[UIImage imageNamed:@"logo_gray80.png"]];
             sourceImage.contentMode = UIViewContentModeScaleAspectFit;
             sourceImage.layer.masksToBounds = YES;
             sourceImage.layer.cornerRadius = 2.0; 
