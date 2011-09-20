@@ -52,7 +52,7 @@
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = @"我了个去~";
+    cell.textLabel.text = @"我了个去~～～～～";
     
     return cell;
     
