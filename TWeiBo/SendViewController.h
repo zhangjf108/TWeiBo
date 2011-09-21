@@ -27,6 +27,7 @@
     IBOutlet UIButton *topicBtn;
     IBOutlet UIButton *atBtn;
     IBOutlet UIButton *picBtn;
+    IBOutlet UIImageView *pinImageView;
     
     //经纬度
     NSString *latitude;
@@ -39,6 +40,7 @@
 @property (nonatomic, retain) IBOutlet UIImageView *imageIconView;
 @property (nonatomic, retain) IBOutlet UIImageView *imageSmallView;
 @property (nonatomic, retain) IBOutlet UIButton *delBtn;
+@property (nonatomic, retain) IBOutlet UIImageView *pinImageView;
 
 @property (nonatomic, retain) NSString *latitude;
 @property (nonatomic, retain) NSString *longitude;

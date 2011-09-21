@@ -39,7 +39,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -52,7 +52,7 @@
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = @"我了个去~～～～～";
+    cell.textLabel.text = @"稍安勿躁，好戏就在后头～";
     
     return cell;
     

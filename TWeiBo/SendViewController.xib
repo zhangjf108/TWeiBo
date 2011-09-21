@@ -832,6 +832,7 @@
 							<string>imgBtn</string>
 							<string>locationBtn</string>
 							<string>picBtn</string>
+							<string>pinImageView</string>
 							<string>saveBtn</string>
 							<string>sendItem</string>
 							<string>topicBtn</string>
@@ -848,6 +849,7 @@
 							<string>UIButton</string>
 							<string>UIButton</string>
 							<string>UIButton</string>
+							<string>UIImageView</string>
 							<string>UIButton</string>
 							<string>UIBarButtonItem</string>
 							<string>UIButton</string>
@@ -867,6 +869,7 @@
 							<string>imgBtn</string>
 							<string>locationBtn</string>
 							<string>picBtn</string>
+							<string>pinImageView</string>
 							<string>saveBtn</string>
 							<string>sendItem</string>
 							<string>topicBtn</string>
@@ -912,6 +915,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">picBtn</string>
 								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">pinImageView</string>
+								<string key="candidateClassName">UIImageView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">saveBtn</string>

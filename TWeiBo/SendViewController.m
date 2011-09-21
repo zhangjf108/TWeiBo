@@ -29,6 +29,7 @@
 @synthesize imageIconView;
 @synthesize imageSmallView;
 @synthesize delBtn;
+@synthesize pinImageView;
 @synthesize latitude;
 @synthesize longitude;
 
@@ -36,6 +37,7 @@
 //菊花
 MBProgressHUD *HUD;
 BOOL isKeyboard = YES;
+float keyboardHeight = 0;
 
 static NSData *imageData;
 
@@ -149,6 +151,7 @@ static NSData *imageData;
 {
     self.imageIconView = nil;
     self.imageSmallView = nil;
+    self.pinImageView = nil;
     HUD = nil;
     [self.view removeFromSuperview];
     
@@ -182,10 +185,10 @@ static NSData *imageData;
 - (void)keyboardWillShow:(id)sender {
     CGRect keyboardFrame;
     [[[((NSNotification *)sender) userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardFrame];
-    float keyboardHeight = CGRectGetHeight(keyboardFrame);
+    keyboardHeight = CGRectGetHeight(keyboardFrame);
     
     //改变高度
-    saveBtn.frame       = CGRectMake(15, 430 - keyboardHeight, 22, 22);
+    saveBtn.frame       = CGRectMake(12, 430 - keyboardHeight, 22, 22);
     cameraBtn.frame     = CGRectMake(55, 430 - keyboardHeight, 25, 20);
     imgBtn.frame        = CGRectMake(100, 430 - keyboardHeight, 25, 20);
     locationBtn.frame   = CGRectMake(145, 430 - keyboardHeight, 20, 20);
@@ -195,6 +198,10 @@ static NSData *imageData;
     imageIconView.frame = CGRectMake(280, 430 - keyboardHeight, 30, 30);
     picBtn.frame        = CGRectMake(280, 430 - keyboardHeight, 30, 30);
     characterSize.frame = CGRectMake(278, 410 - keyboardHeight, 38, 21);
+    
+    if (pinImageView) {
+        pinImageView.frame = CGRectMake(15, 400 - keyboardHeight, 15, 30);
+    }
 
 }
 
@@ -385,6 +392,14 @@ static NSData *imageData;
 
 //定位显示地图
 - (IBAction) location:(id)sender {
+    if (pinImageView != nil) {
+        [pinImageView removeFromSuperview];
+        pinImageView = nil;
+        self.latitude = nil;
+        self.longitude = nil;
+        return;
+    }
+    
     CLLocationManager *locManager = [[CLLocationManager alloc] init];
     [locManager setDelegate:self]; 
     [locManager setDesiredAccuracy:kCLLocationAccuracyBest];
@@ -393,8 +408,11 @@ static NSData *imageData;
     CLLocationCoordinate2D loc = [[locManager location] coordinate];
     self.latitude = [NSString stringWithFormat:@"%f", loc.latitude];
     self.longitude = [NSString stringWithFormat:@"%f", loc.longitude];
-    NSLog(@"%@ %@", self.latitude, self.longitude);
     [locManager release];
+    
+    pinImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 400 - keyboardHeight, 15, 30)];
+    pinImageView.image = [UIImage imageNamed:@"pin.png"];
+    [self.view addSubview:pinImageView];
 }
 
 //打开相机
@@ -519,7 +537,6 @@ static NSData *imageData;
     MWPhotoBrowser *browser = [[[MWPhotoBrowser alloc] initWithPhotos:photos] autorelease];
     [browser setSave:YES];
 	[self presentModalViewController:browser animated:YES];
-    NSLog(@"@show");
 }
 
 - (void)viewDidUnload
@@ -537,6 +554,7 @@ static NSData *imageData;
     [topicBtn release];
     [atBtn release];
     [picBtn release];
+    [pinImageView release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
