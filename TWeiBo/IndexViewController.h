@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 #import "MoreLoadCell.h"
+#import "Account.h"
 
 @interface IndexViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate> {
     BOOL isflage;
@@ -19,6 +20,8 @@
     
     NSMutableDictionary *userDict;
     
+    NSArray *accountArray;
+    
     MoreLoadCell *moreLoadCell;
     
     IBOutlet UIBarItem *sendItem;
@@ -27,6 +30,7 @@
 
 @property(nonatomic, retain) NSMutableArray *weiboArray;
 @property(nonatomic, retain) NSMutableDictionary *userDict;
+@property(nonatomic, retain) NSArray *accountArray;
 @property(nonatomic, retain) IBOutlet UIBarItem *sendItem;
 @property(nonatomic, retain) IBOutlet UIBarItem *refreshItem;
 

@@ -22,6 +22,7 @@
 @implementation IndexViewController
 
 @synthesize sendItem, refreshItem, weiboArray, userDict;
+@synthesize accountArray;
 
 int lastUpdate  = 0;
 
@@ -44,6 +45,15 @@ int lastUpdate  = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //设置Title
+    UIButton *titleBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, 30, 100, 30)];
+    [titleBtn setTitle:@"首页" forState:UIControlContentVerticalAlignmentCenter];
+    [titleBtn setShowsTouchWhenHighlighted:YES];
+    [titleBtn addTarget:self 
+                 action:@selector(selectAccount) 
+       forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.titleView = titleBtn;
     
     weiboArray = [[NSMutableArray alloc] init];
     userDict = [[NSMutableDictionary alloc] init];
@@ -77,9 +87,17 @@ int lastUpdate  = 0;
 
 }
 
+- (void) selectAccount {
+    //UIPickerView *accountPick = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
+    
+}
+
 - (void) viewWillAppear:(BOOL)animated 
 {
-    
+    Account *account = [[Account alloc] init];
+    self.accountArray = [account getAccountList];
+    //NSLog(@"account:%d",[accountArray retainCount]);
+    //NSLog(@"%@", accountArray);
 }
 
 #pragma mark -
@@ -254,7 +272,7 @@ int lastUpdate  = 0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     Account *account = [[Account alloc] init];
-    NSArray *accountArray = [account getAccountList];
+    //NSArray *accountArray = [account getAccountList];
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableDictionary *tempUser = [[NSMutableDictionary alloc] init];
@@ -266,7 +284,13 @@ int lastUpdate  = 0;
             if (qqContent != nil) {
                 NSArray *temp = [[qqContent objectForKey:@"data"] objectForKey:@"info"];
                 
+                for (NSDictionary *content in temp) {
+                    [content setValue:[accountInfo objectForKey:@"Id"] forKey:@"weiboId"];
+                }
+                
                 [tempArray addObjectsFromArray:temp];
+                
+                
                 [tempArray retain];
                 [tempUser setDictionary:[[qqContent objectForKey:@"data"] objectForKey:@"user"]];
                 [tempUser retain];
@@ -280,6 +304,11 @@ int lastUpdate  = 0;
             NSArray *sinaContent = [self getSinaWeiboListWithToken:[accountInfo objectForKey:@"Token"] 
                                                             tokenSecret:[accountInfo objectForKey:@"TokenSecret"]];
             if (sinaContent != nil) {
+                
+                for (NSDictionary *content in sinaContent) {
+                    [content setValue:[accountInfo objectForKey:@"Id"] forKey:@"weiboId"];
+                }
+                
                 [tempArray addObjectsFromArray:sinaContent];
                 [tempArray retain];
                 
@@ -345,12 +374,12 @@ int lastUpdate  = 0;
     
     //加载数据
     Account *account = [[Account alloc] init];
-    NSArray *accountArray = [account getAccountList];
+    NSArray *accountArrayTemp = [account getAccountList];
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     NSMutableDictionary *tempUser = [[NSMutableDictionary alloc] init];
     
-    for (NSDictionary *accountInfo in accountArray) {
+    for (NSDictionary *accountInfo in accountArrayTemp) {
         if ([@"QQ" isEqualToString:[accountInfo objectForKey:@"Type"]]) {
             NSDictionary *qqContent =  [self getQQWeiboListNextWithToken:[accountInfo objectForKey:@"Token"] 
                                                              tokenSecret:[accountInfo objectForKey:@"TokenSecret"] 
@@ -438,6 +467,7 @@ int lastUpdate  = 0;
     [refreshItem release];
     [weiboArray release];
     [userDict release];
+    [accountArray release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
