@@ -11,26 +11,33 @@
 #import "MoreLoadCell.h"
 #import "Account.h"
 
-@interface IndexViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate> {
+@interface IndexViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, UIPickerViewDelegate, UIPickerViewDataSource> {
     BOOL isflage;
     EGORefreshTableHeaderView *_refreshHeaderView;   
     BOOL _reloading;
     
     NSMutableArray *weiboArray;
     
+    NSMutableArray *sortArray;
+    
     NSMutableDictionary *userDict;
     
     NSArray *accountArray;
     
+    UIPickerView *accountPickView;
+    
     MoreLoadCell *moreLoadCell;
     
+    IBOutlet UIButton *titleBtn;
     IBOutlet UIBarItem *sendItem;
     IBOutlet UIBarItem *refreshItem;
 }
 
 @property(nonatomic, retain) NSMutableArray *weiboArray;
+@property(nonatomic, retain) NSMutableArray *sortArray;
 @property(nonatomic, retain) NSMutableDictionary *userDict;
 @property(nonatomic, retain) NSArray *accountArray;
+@property(nonatomic, retain) IBOutlet UIButton *titleBtn;
 @property(nonatomic, retain) IBOutlet UIBarItem *sendItem;
 @property(nonatomic, retain) IBOutlet UIBarItem *refreshItem;
 

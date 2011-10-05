@@ -18,10 +18,16 @@
 #import "QQWeiBoCell.h"
 #import "SinaWeiBoCell.h"
 #import "WeiboCellHeight.h"
+#import "QQDetailViewController.h"
 
 @implementation IndexViewController
 
-@synthesize sendItem, refreshItem, weiboArray, userDict;
+@synthesize titleBtn;
+@synthesize sendItem;
+@synthesize refreshItem;
+@synthesize weiboArray;
+@synthesize sortArray;
+@synthesize userDict;
 @synthesize accountArray;
 
 int lastUpdate  = 0;
@@ -47,7 +53,7 @@ int lastUpdate  = 0;
     [super viewDidLoad];
     
     //设置Title
-    UIButton *titleBtn = [[UIButton alloc] initWithFrame:CGRectMake(100, 30, 100, 30)];
+    titleBtn = [[UIButton alloc] initWithFrame:CGRectMake(80, 30, 160, 30)];
     [titleBtn setTitle:@"首页" forState:UIControlContentVerticalAlignmentCenter];
     [titleBtn setShowsTouchWhenHighlighted:YES];
     [titleBtn addTarget:self 
@@ -55,6 +61,15 @@ int lastUpdate  = 0;
        forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.titleView = titleBtn;
     
+    /*
+    accountPickView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
+    accountPickView.delegate = self;
+    accountPickView.showsSelectionIndicator = YES;
+    //[self.view insertSubview:accountPickView atIndex:999];
+    [self.view addSubview:accountPickView];
+    [self.view bringSubviewToFront:accountPickView];
+    */
+     
     weiboArray = [[NSMutableArray alloc] init];
     userDict = [[NSMutableDictionary alloc] init];
     
@@ -87,12 +102,37 @@ int lastUpdate  = 0;
 
 }
 
-- (void) selectAccount {
-    //UIPickerView *accountPick = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
-    
+#pragma mark -
+#pragma mark UIPickViewDataSource
+
+- (NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
 }
 
-- (void) viewWillAppear:(BOOL)animated 
+- (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return [accountArray count];
+}
+
+- (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    
+    NSDictionary *accountInfo = [accountArray objectAtIndex:row];
+    return [NSString stringWithFormat:@"%@(%@)", [accountInfo objectForKey:@"NickName"], 
+                                                    [accountInfo objectForKey:@"Type"]];
+}
+
+- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    NSDictionary *accountInfo = [accountArray objectAtIndex:row];
+    [titleBtn setTitle:[accountInfo objectForKey:@"NickName"] 
+              forState:UIControlContentVerticalAlignmentCenter];
+    
+    //刷新数据
+}
+
+- (void) selectAccount {
+
+}
+
+- (void) viewWillAppear:(BOOL)animated
 {
     Account *account = [[Account alloc] init];
     self.accountArray = [account getAccountList];
@@ -192,7 +232,7 @@ int lastUpdate  = 0;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"QQWeiBoCell";
+    static NSString *CellIdentifier = @"WeiBoCell";
     //更多Cell
     if (indexPath.row == [weiboArray count]) {
         
@@ -252,7 +292,22 @@ int lastUpdate  = 0;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == [weiboArray count]) {
         [self performSelector:@selector(beginLoadMore)];
+        return;
     }
+    
+    QQDetailViewController *qqDetail = [[[QQDetailViewController alloc] init] autorelease];
+    
+    NSDictionary *content = [weiboArray objectAtIndex:indexPath.row];
+    NSArray *contentKeys = [content allKeys];
+    
+    if ([contentKeys containsObject:@"created_at"]) {
+        
+    } else {
+        [qqDetail setDetailContent:content];
+    }
+    
+    self.navigationItem.title = @"返回";
+    [self.navigationController pushViewController:qqDetail animated:YES];
 }
 
 #pragma mark -
@@ -286,6 +341,7 @@ int lastUpdate  = 0;
                 
                 for (NSDictionary *content in temp) {
                     [content setValue:[accountInfo objectForKey:@"Id"] forKey:@"weiboId"];
+                    [sortArray addObject:[content objectForKey:@"timestamp"]];
                 }
                 
                 [tempArray addObjectsFromArray:temp];
@@ -307,6 +363,7 @@ int lastUpdate  = 0;
                 
                 for (NSDictionary *content in sinaContent) {
                     [content setValue:[accountInfo objectForKey:@"Id"] forKey:@"weiboId"];
+                    [sortArray addObject:[content objectForKey:@"create_at"]];
                 }
                 
                 [tempArray addObjectsFromArray:sinaContent];
@@ -468,11 +525,28 @@ int lastUpdate  = 0;
     [weiboArray release];
     [userDict release];
     [accountArray release];
+    [accountPickView release];
+    [titleBtn release];
+    [sortArray release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark -
+#pragma mark Private Methods
+- (int) convertDateTime:(NSString *)originalDateTime {
+    NSDateFormatter* dateFormat = [[[NSDateFormatter alloc] init] autorelease];
+    
+    [dateFormat setDateFormat:@"EEE MMM dd HH:mm:ss Z yyyy"];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [dateFormat setLocale:usLocale];  
+    
+    NSDate *dateTemp =[dateFormat dateFromString:originalDateTime];
+    
+    return (int)[dateTemp timeIntervalSince1970];
 }
 
 @end

@@ -257,7 +257,7 @@ static CGRect getFrameByType(NSString *type) {
         // 填充矩形内部颜色
         CGContextAddPath(context, path);
         CGContextSetFillColorSpace(context, CGColorSpaceCreateDeviceRGB());
-        CGFloat fillColour[4] = {250.0/255, 250.0/255.0, 250.0/255.0, 1};
+        CGFloat fillColour[4] = {240.0/255, 240.0/255.0, 240.0/255.0, 1};
         CGContextSetFillColor(context, fillColour);
         CGContextEOFillPath(context);
         // 释放内存
