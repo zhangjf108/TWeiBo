@@ -30,6 +30,8 @@
 {
     [super viewDidLoad];
     self.navigationItem.title = @"微博正文";
+    
+    NSLog(@"%@", self.content);
 }
 
 - (void)viewDidUnload

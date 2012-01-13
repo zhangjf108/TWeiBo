@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[IndexViewController loadData]:IndexViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "(const char)*(((tempUser)-&gt;isa)-&gt;name)">
+            </PersistentString>
+            <PersistentString
+               value = "(NSObject)file">
+            </PersistentString>
+            <PersistentString
+               value = "(const char)*(((fileName)-&gt;isa)-&gt;name)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

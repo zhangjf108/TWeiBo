@@ -242,9 +242,11 @@ static NSInteger SortParameter(NSString *key1, NSString *key2, void *context) {
 
     if (!error) {
         NSString *postResponse = [postRequest responseString];
+        NSLog(@"res:%@", postResponse);
         NSDictionary *returnDic = [postResponse JSONValue];
         return returnDic;
     } else {
+        NSLog(@"ERROR:%@", error);
         return nil;
     }
 }
